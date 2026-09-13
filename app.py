@@ -38,7 +38,8 @@ def get_gemini_client():
     return genai.Client(api_key=api_key)
 
 
-def call_gemini(prompt: str, model: str = "gemini-2.5-flash") -> str:
+def call_gemini(prompt: str, model: str = "gemini-3.6-flash") -> str:
+    """Call Gemini using the current model required by the API error message."""
     client = get_gemini_client()
     response = client.models.generate_content(model=model, contents=prompt)
     return response.text or ""
@@ -83,7 +84,6 @@ ANNUAL REPORT TEXT:
     try:
         return json.loads(raw)
     except json.JSONDecodeError as exc:
-        # Allow Gemini responses that accidentally contain surrounding text.
         start = raw.find("{")
         end = raw.rfind("}")
         if start >= 0 and end > start:
